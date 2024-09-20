@@ -4,6 +4,7 @@ import { useGlobal } from '@/lib/global'
 import throttle from 'lodash.throttle'
 import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
+import { useMagzineGlobal } from '..'
 import CONFIG from '../config'
 import LogoBar from './LogoBar'
 import { MenuBarMobile } from './MenuBarMobile'
@@ -21,6 +22,7 @@ export default function Header(props) {
   const lastScrollY = useRef(0) // 用于存储上一次的滚动位置
   const { locale } = useGlobal()
   const router = useRouter()
+  const { searchModal } = useMagzineGlobal()
 
   const defaultLinks = [
     {
@@ -119,14 +121,14 @@ export default function Header(props) {
       {/* 导航栏菜单内容 */}
       <div
         id='top-navbar'
-        className='px-2 lg:px-0 flex w-full mx-auto max-w-screen-2xl h-20 transition-all duration-200 items-center justify-between'>
+        className='px-4 lg:px-0 flex w-full mx-auto max-w-screen-3xl h-20 transition-all duration-200 items-center justify-between'>
         {/* 搜索栏 */}
         {showSearchInput && (
           <input
             autoFocus
             id='simple-search'
             onKeyUp={onKeyUp}
-            className='outline-none flex flex-row text-base relative w-full border-b py-2'
+            className='outline-none dark:bg-hexo-black-gray dark:text flex flex-row text-base relative w-full border-b py-2'
             aria-label='Submit search'
             type='search'
             name='s'
@@ -153,19 +155,20 @@ export default function Header(props) {
         )}
 
         {/* 右侧移动端折叠按钮 */}
-        <div className='flex items-center gap-x-2'>
+        <div className='flex items-center gap-x-2 pr-2'>
           {/* 搜索按钮 */}
-          <div className='flex text-center items-center cursor-pointer'>
+          <div
+            onClick={toggleShowSearchInput}
+            className='flex text-center items-center cursor-pointer p-2'>
             <i
               className={
                 showSearchInput
                   ? 'fa-regular fa-circle-xmark'
                   : 'fa-solid fa-magnifying-glass' + ' align-middle'
-              }
-              onClick={toggleShowSearchInput}></i>
+              }></i>
           </div>
           <div className='mr-1 flex md:hidden justify-end items-center text-lg space-x-4 font-serif dark:text-gray-200'>
-            <div onClick={toggleMenuOpen} className='cursor-pointer'>
+            <div onClick={toggleMenuOpen} className='cursor-pointer p-2'>
               {isOpen ? (
                 <i className='fas fa-times' />
               ) : (
